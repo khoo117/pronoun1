@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pronouns Grammar Quiz (20 Questions)</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f3f5f9;
+  margin:0;
+  padding:16px;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+}
+h2{margin-top:0;}
+.question{
+  border-bottom:1px solid #eee;
+  padding:14px 0;
+}
+.options label{
+  display:inline-block;
+  margin-right:14px;
+  margin-bottom:6px;
+  padding:6px 10px;
+  border:2px solid #cfd6e4;
+  border-radius:20px;
+  cursor:pointer;
+}
+.correct{
+  border-color:#22c55e;
+  background:#ecfff4;
+}
+.wrong{
+  border-color:#ef4444;
+  background:#fff1f0;
+}
+.hint{
+  font-size:13px;
+  margin-top:6px;
+  color:#555;
+}
+.hint.ok{color:#16a34a;font-weight:bold;}
+.hint.bad{color:#b91c1c;font-weight:bold;}
+button{
+  margin-top:16px;
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  background:#2563eb;
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+}
+.result{
+  margin-top:16px;
+  font-weight:bold;
+}
+.explain{
+  font-size:13px;
+  color:#374151;
+  margin-top:6px;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>Pronouns Grammar Quiz（代名词语法 20 题）</h2>
+<p>选择正确的代名词。选了会立刻显示对 / 错。</p>
+
+<div id="quiz"></div>
+
+<button onclick="checkAll()">Check All</button>
+<div id="score" class="result"></div>
+</div>
+
+<script>
+const questions = [
+["This is my phone. Please don’t touch ____.",["I","me","mine","it"],"it","代替前面提到的物品，用 it。"],
+["Sarah is absent today. I will call ____ later.",["she","her","hers"],"her","call 后面用宾格 her。"],
+["____ is raining heavily today.",["He","She","It","They"],"It","天气用 it。"],
+["Tom and I are classmates. ____ study together.",["We","Us","Our"],"We","主语位置用 we。"],
+["This book is not yours. It is ____.",["my","mine","me"],"mine","mine = 我的（书）。"],
+["Please give the keys to ____.",["he","him","his"],"him","to 后面用宾格 him。"],
+["My parents are kind. ____ always support me.",["They","Them","Their"],"They","主语位置用 They。"],
+["Can I borrow ____ pen?",["you","your","yours"],"your","后面有名词 pen，用 your。"],
+["The teacher asked ____ to be quiet.",["we","us","our"],"us","asked 后用宾格 us。"],
+["This is my brother. ____ name is John.",["He","His","Him"],"His","修饰名词用 his。"],
+
+["Anna did the homework by ____.",["she","her","herself"],"herself","by oneself = 独自。"],
+["I saw John and Mary and waved at ____.",["they","them","their"],"them","at 后面用宾格 them。"],
+["____ laptop is new, but mine is old.",["Your","Yours","You"],"Your","后面有名词，用 Your。"],
+["We enjoyed ____ at the party.",["we","us","ourselves"],"ourselves","enjoy oneself。"],
+["Could you help ____ with this?",["I","me","mine"],"me","help 后用宾格 me。"],
+["Please give ____ some water.",["they","them","their"],"them","give 后用宾格 them。"],
+["This is my sister. ____ is a nurse.",["She","Her","Hers"],"She","主语用 She。"],
+["Is this your bag? Yes, it’s ____.",["my","mine","me"],"mine","mine = 我的（包）。"],
+["My brother and I did it ____.",["myself","ourselves","themselves"],"ourselves","主语是 we。"],
+["That man is Mr. Lee. ____ teaches English.",["He","Him","His"],"He","主语用 He。"]
+];
+
+const quiz=document.getElementById("quiz");
+
+questions.forEach((q,i)=>{
+  const div=document.createElement("div");
+  div.className="question";
+  div.innerHTML=`
+    <p><b>${i+1}.</b> ${q[0]}</p>
+    <div class="options">
+      ${q[1].map(opt=>`
+        <label>
+          <input type="radio" name="q${i}" value="${opt}" onchange="check(${i},this)">
+          ${opt}
+        </label>`).join("")}
+    </div>
+    <div id="hint${i}" class="hint"></div>
+    <div id="exp${i}" class="explain">Explanation: ${q[3]}</div>
+  `;
+  quiz.appendChild(div);
+});
+
+function check(i,el){
+  const labels=el.parentNode.parentNode.querySelectorAll("label");
+  labels.forEach(l=>l.classList.remove("correct","wrong"));
+  const hint=document.getElementById("hint"+i);
+  if(el.value===questions[i][2]){
+    el.parentNode.classList.add("correct");
+    hint.textContent="✓ Correct";
+    hint.className="hint ok";
+  }else{
+    el.parentNode.classList.add("wrong");
+    hint.textContent="✗ Try again";
+    hint.className="hint bad";
+  }
+}
+
+function checkAll(){
+  let score=0;
+  questions.forEach((q,i)=>{
+    const checked=document.querySelector(`input[name="q${i}"]:checked`);
+    if(checked && checked.value===q[2]){
+      score++;
+    }else{
+      document.getElementById("exp"+i).style.display="block";
+    }
+  });
+  document.getElementById("score").textContent=
+    `Your score: ${score} / ${questions.length}`;
+}
+</script>
+</body>
+</html>
